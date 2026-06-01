@@ -16,6 +16,7 @@
         </header>
 
         <main class="card">
+            <!-- 1. SKRIN LOGIN -->
             <section v-if="screen === 'login'">
                 <h2>Selamat Datang</h2>
                 <p>Masukkan nama anda untuk bermula. Tiada pendaftaran diperlukan.</p>
@@ -25,6 +26,7 @@
                 <button @click="handleLogin" :disabled="!myName.trim()" class="btn btn-block">Masuk Game</button>
             </section>
 
+            <!-- 2. SKRIN MENU UTAMA -->
             <section v-if="screen === 'menu'">
                 <h2>Menu Utama</h2>
                 <div class="menu-actions">
@@ -61,6 +63,7 @@
                 <button @click="padamNama" class="btn btn-link">Tukar Nama</button>
             </section>
 
+            <!-- 3. SKRIN LOBBY -->
             <section v-if="screen === 'lobby'">
                 <div class="lobby-header">
                     <h2>Bilik: <span class="highlight">{{ kodBilik }}</span></h2>
@@ -86,39 +89,46 @@
                 <button @click="keluarGame" class="btn btn-danger btn-block mgt-10">Keluar</button>
             </section>
 
+            <!-- 4. SKRIN GAMEPLAY -->
             <section v-if="screen === 'game'">
                 <div class="game-header">
-                    <div class="role-card" :class="myRole.toLowerCase()">
-                        <h3>Peranan Anda: <span class="role-text">{{ myRole }}</span></h3>
-                    </div>
-                    
                     <div class="word-card">
                         <p class="kategori">Kategori: <strong>{{ kategoriKunci }}</strong></p>
                         
+                        <!-- Bahagian Sembunyi Kad Peranan + Perkataan (Satu Box Sekali Gus) -->
                         <div class="secret-word-container">
                             <div class="word-blur-box" :class="{ 'reveal': isRevealed }">
+                                <!-- Status Peranan Tersembunyi -->
+                                <div class="role-badge" :class="myRole.toLowerCase()">
+                                    Peranan Anda: <span>{{ myRole }}</span>
+                                </div>
+                                
+                                <!-- Teks Perkataan Tersembunyi -->
                                 <h2 v-if="myRole === 'Sivil'" class="word-text">🔑 Perkataan: <span class="highlight">{{ kataKunci }}</span></h2>
                                 <h2 v-else class="word-text">🕵️ Perkataan: <span class="highlight">{{ kataKunciImposter }}</span></h2>
                             </div>
                             
+                            <!-- Butang Utama Pengaktif Amaran/Intip -->
                             <button @touchstart.prevent="isRevealed = true" 
                                     @touchend="isRevealed = false"
                                     @mousedown="isRevealed = true"
                                     @mouseup="isRevealed = false"
                                     @mouseleave="isRevealed = false"
                                     class="btn btn-reveal">
-                                {{ isRevealed ? '🔴 Lepas untuk Sorok' : '👁️ Tekan & Tahan untuk Intip' }}
+                                {{ isRevealed ? '🔴 Lepas untuk Sorok Status' : '👁️ Tekan & Tahan untuk Intip Status' }}
                             </button>
                         </div>
                     </div>
                 </div>
 
+                <!-- Fasa Perbincangan -->
                 <div v-if="statusGame === 'perbincangan'" class="fasa-section text-center">
                     <div class="timer-box">💬 Fasa Perbincangan Lisan</div>
                     <p class="instruction">Sila ambil giliran untuk menerangkan perkataan anda di meja makan tanpa menyebut perkataan tersebut secara langsung!</p>
                     <button v-if="isHost" @click="tukarFasaUndian" class="btn btn-primary btn-block">Tamat Perbincangan & Undi</button>
                 </div>
 
+                <!-- Fasa Undian -->
                 <div v-if="statusGame === 'undian'" class="fasa-section">
                     <h3 class="text-center text-warning">🗳️ Sila Pilih Suspek Imposter!</h3>
                     <p class="instruction text-center" v-if="sudahUndi">Undian anda telah dihantar. Menunggu keputusan Host...</p>
@@ -137,6 +147,7 @@
                 </div>
             </section>
 
+            <!-- 5. SKRIN KEPUTUSAN ROUND -->
             <section v-if="screen === 'result'">
                 <h2>Keputusan Round</h2>
                 
