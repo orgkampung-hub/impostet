@@ -1,27 +1,204 @@
 [
   {
+    "kategori": "Automotif Malaysia",
+    "sivil": "Perodua Myvi",
+    "imposter": "4 Tayar"
+  },
+  {
     "kategori": "Makanan Tempatan",
     "sivil": "Nasi Lemak",
-    "imposter": "Roti Canai"
+    "imposter": "Bersambal"
   },
   {
     "kategori": "Automotif Malaysia",
-    "sivil": "Perodua Myvi",
-    "imposter": "Proton Saga"
+    "sivil": "Proton Saga",
+    "imposter": "Ada Enjin"
   },
   {
-    "kategori": "Peranti Elektronik",
-    "sivil": "Telefon Pintar",
-    "imposter": "Tablet"
+    "kategori": "Gajet & Fon",
+    "sivil": "iPhone",
+    "imposter": "Skrin Sentuh"
+  },
+  {
+    "kategori": "Gajet & Fon",
+    "sivil": "Powerbank",
+    "imposter": "Bateri Cas"
+  },
+  {
+    "kategori": "Makanan Tempatan",
+    "sivil": "Roti Canai",
+    "imposter": "Atas Atas Meja"
+  },
+  {
+    "kategori": "Minuman",
+    "sivil": "Teh Tarik",
+    "imposter": "Ada Buih"
+  },
+  {
+    "kategori": "Barangan Rumah",
+    "sivil": "Kipas Siling",
+    "imposter": "Berpusing"
+  },
+  {
+    "kategori": "Barangan Rumah",
+    "sivil": "Peti Sejuk",
+    "imposter": "Ada Pintu"
+  },
+  {
+    "kategori": "Pengangkutan",
+    "sivil": "Motosikal LC135",
+    "imposter": "Isi Minyak"
+  },
+  {
+    "kategori": "Pengangkutan",
+    "sivil": "Tren LRT",
+    "imposter": "Bawa Penumpang"
+  },
+  {
+    "kategori": "Buah-buahan",
+    "sivil": "Durian D24",
+    "imposter": "Kulit Keras"
+  },
+  {
+    "kategori": "Pakaian",
+    "sivil": "Baju Melayu",
+    "imposter": "Kain Fabrik"
+  },
+  {
+    "kategori": "Tempat & Landmark",
+    "sivil": "Menara KLCC",
+    "imposter": "Bangunan Tinggi"
+  },
+  {
+    "kategori": "Barangan Dapur",
+    "sivil": "Periuk Nasi Elektrik",
+    "imposter": "Guna Wayar"
+  },
+  {
+    "kategori": "Permainan Video",
+    "sivil": "PlayStation 5",
+    "imposter": "Main Game"
   },
   {
     "kategori": "Haiwan",
-    "sivil": "Harimau",
-    "imposter": "Kucing"
+    "sivil": "Kucing Pariah",
+    "imposter": "Ada Ekor"
   },
   {
-    "kategori": "Sukan",
-    "sivil": "Bola Sepak",
-    "imposter": "Futsal"
+    "kategori": "Rancangan TV",
+    "sivil": "Berita TV3",
+    "imposter": "Ada Gambar"
+  },
+  {
+    "kategori": "Hobi & Sukan",
+    "sivil": "Kasut Bola Nike",
+    "imposter": "Kena Sarung"
+  },
+  {
+    "kategori": "Alat Tulis",
+    "sivil": "Pensel 2B",
+    "imposter": "Boleh Pegang"
+  },
+
+
+  {
+    "kategori": "Makanan Tempatan",
+    "sivil": "Sate Ayam",
+    "imposter": "Cucuk Lidi"
+  },
+  {
+    "kategori": "Minuman",
+    "sivil": "Kopi Ais Ikat Tepi",
+    "imposter": "Dalam Plastik"
+  },
+  {
+    "kategori": "Automotif Malaysia",
+    "sivil": "Perodua Kancil",
+    "imposter": "Ada Stereng"
+  },
+  {
+    "kategori": "Gajet & Hiburan",
+    "sivil": "Smart TV",
+    "imposter": "Guna Remote"
+  },
+  {
+    "kategori": "Barangan Rumah",
+    "sivil": "Mesin Basuh",
+    "imposter": "Guna Air"
+  },
+  {
+    "kategori": "Alat Tulis",
+    "sivil": "Gam Gajah",
+    "imposter": "Dalam Botol"
+  },
+  {
+    "kategori": "Barangan Dapur",
+    "sivil": "Dapur Gas",
+    "imposter": "Mengeluarkan Api"
+  },
+  {
+    "kategori": "Barangan Peribadi",
+    "sivil": "Dompet Kulit",
+    "imposter": "Boleh Lipat"
+  },
+  {
+    "kategori": "Aksesori Fon",
+    "sivil": "Earphone Bluetooth",
+    "imposter": "Sumbat Kat Telinga"
+  },
+  {
+    "kategori": "Barangan Rumah",
+    "sivil": "Seterika Wap",
+    "imposter": "Rasa Panas"
+  },
+  {
+    "kategori": "Pasar Malam",
+    "sivil": "Apam Balik",
+    "imposter": "Lipat Dua"
+  },
+  {
+    "kategori": "Tempat & Kedai",
+    "sivil": "Kedai Mamak",
+    "imposter": "Ada Kerusi"
+  },
+  {
+    "kategori": "Pengangkutan",
+    "sivil": "Bas Ekspres",
+    "imposter": "Ada Cermin"
+  },
+  {
+    "kategori": "Barangan Dapur",
+    "sivil": "Pisau Pemotong Daging",
+    "imposter": "Benda Tajam"
+  },
+  {
+    "kategori": "Hobi & Sukan",
+    "sivil": "Basikal Lajak",
+    "imposter": "Ada Kayuh"
+  },
+  {
+    "kategori": "Pakaian",
+    "sivil": "Kain Pelikat",
+    "imposter": "Corak Petak"
+  },
+  {
+    "kategori": "Kesihatan",
+    "sivil": "Minyak Cap Kapak",
+    "imposter": "Bau Kuat"
+  },
+  {
+    "kategori": "Barangan Kedai",
+    "sivil": "Tong Gas Petronas",
+    "imposter": "Warna Hijau"
+  },
+  {
+    "kategori": "Haiwan",
+    "sivil": "Cicak Dinding",
+    "imposter": "Boleh Merangkak"
+  },
+  {
+    "kategori": "Alat Rumah",
+    "sivil": "Tangga Lipat Aluminium",
+    "imposter": "Boleh Panjat"
   }
 ]
