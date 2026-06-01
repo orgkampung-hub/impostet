@@ -2,50 +2,45 @@ const { createApp, ref, computed, onMounted } = Vue;
 
 createApp({
     setup() {
-        // Skrin Utama Aliran Game: 'login', 'menu', 'lobby', 'game', 'result'
         const screen = ref('login');
         const myId = ref('');
         const myName = ref('');
         const peerIdInput = ref('');
         const kodBilik = ref('');
         
-        // Konfigurasi Kumpulan & Bilik
         const maxPlayers = ref(4);
         const isHost = ref(false);
-        const senaraiPemain = ref([]); // Unsur: { id, nama, role, point, undian, pilihanUndi }
+        const senaraiPemain = ref([]); 
         
-        // Rahsia Pusingan (Round)
         const myRole = ref('');
         const kategoriKunci = ref('');
         const kataKunci = ref('');
         const kataKunciImposter = ref('');
         
-        // Fasa Gameplay & Status Undi
-        const statusGame = ref('perbincangan'); // 'perbincangan' atau 'undian'
+        // State Baharu untuk Hide/Reveal Status Perkataan
+        const isRevealed = ref(false); 
+
+        const statusGame = ref('perbincangan'); 
         const sudahUndi = ref(false);
         const pilihanSaya = ref('');
         const maklumatTamat = ref('');
-        const senaraiUndiDiterima = ref([]); // Track id pengundi untuk dikira oleh Host
+        const senaraiUndiDiterima = ref([]); 
 
         let peer = null;
-        let senaraiConn = []; // Digunakan oleh Host untuk kawal senarai peranti rakan
-        let connToHost = null; // Digunakan oleh Player Biasa untuk bercakap dengan Host
-        let databasePerkataan = []; // Memegang list dari words.json
+        let senaraiConn = []; 
+        let connToHost = null; 
+        let databasePerkataan = []; 
 
         onMounted(() => {
             const savedName = localStorage.getItem('imp_user_name');
             if (savedName) myName.value = savedName;
         });
 
-        // --- SISTEM PENDAFTARAN & LOGIN ---
         const handleLogin = () => {
             if (!myName.value.trim()) return;
             localStorage.setItem('imp_user_name', myName.value);
             
-            // Jana 4 Aksara Token sebagai Peer ID Bilik
             myId.value = Math.random().toString(36).substring(2, 6).toUpperCase();
-            
-            // Mulakan sambungan PeerJS ke Cloud Server Awam
             peer = new Peer(myId.value);
             
             peer.on('open', () => {
@@ -58,13 +53,11 @@ createApp({
             });
         };
 
-        // --- PENGURUSAN AKSI HOST ---
         const buatBilik = async () => {
             isHost.value = true;
             kodBilik.value = myId.value;
             screen.value = 'lobby';
             
-            // Masukkan diri sendiri selaku pemain pertama
             senaraiPemain.value.push({
                 id: myId.value,
                 nama: myName.value,
@@ -74,10 +67,8 @@ createApp({
                 pilihanUndi: ''
             });
 
-            // Ambil data perkataan siap-siap
             await muatTurunPerkataan();
 
-            // Sediakan telinga Host untuk dengar kemasukan rakan-rakan meja makan
             peer.on('connection', (conn) => {
                 if (senaraiPemain.value.length >= maxPlayers.value || screen.value !== 'lobby') {
                     setTimeout(() => conn.close(), 500);
@@ -124,7 +115,6 @@ createApp({
             });
         };
 
-        // --- PENGURUSAN AKSI PEMAIN BIASA ---
         const sertaiBilik = () => {
             if (!peerIdInput.value.trim()) return;
             isHost.value = false;
@@ -154,6 +144,7 @@ createApp({
                     statusGame.value = 'perbincangan';
                     sudahUndi.value = false;
                     pilihanSaya.value = '';
+                    isRevealed.value = false; // Reset status intip
                     screen.value = 'game';
                 }
                 if (data.type === 'MASUK_FASA_UNDI') {
@@ -172,21 +163,18 @@ createApp({
             });
         };
 
-        // --- DATABASE & LOGIK PENGURUSAN GAMEPLAY ---
         const muatTurunPerkataan = async () => {
             try {
                 const res = await fetch('words.json');
                 databasePerkataan = await res.json();
             } catch (e) {
-                // Sediakan data sandaran sekiranya fail words.json gagal dibaca
                 databasePerkataan = [{ kategori: "Makanan", sivil: "Nasi Lemak", imposter: "Roti Canai" }];
             }
         };
 
         const mulaPermainan = () => {
-            if (senaraiPemain.value.length < 3) return;
+            if (senaraiPemain.value.length < 2) return; // Had ditukar ke 2 untuk testing
 
-            // 1. Pilih Imposter secara Rawak
             const indexRawak = Math.floor(Math.random() * senaraiPemain.value.length);
             senaraiPemain.value.forEach((p, idx) => {
                 p.role = (idx === indexRawak) ? 'Imposter' : 'Sivil';
@@ -194,17 +182,14 @@ createApp({
                 p.pilihanUndi = '';
             });
 
-            // 2. Pilih Rahsia Perkataan dari database
             const itemRawak = databasePerkataan[Math.floor(Math.random() * databasePerkataan.length)];
             kategoriKunci.value = itemRawak.kategori;
             kataKunci.value = itemRawak.sivil;
             kataKunciImposter.value = itemRawak.imposter;
 
-            // Tetapkan peranan untuk Host sendiri
             const saya = senaraiPemain.value.find(p => p.id === myId.value);
             myRole.value = saya.role;
 
-            // 3. Edarkan Arahan Mula Game kepada semua peranti
             senaraiConn.forEach(c => {
                 if (c.open) {
                     c.send({
@@ -220,6 +205,7 @@ createApp({
             statusGame.value = 'perbincangan';
             sudahUndi.value = false;
             pilihanSaya.value = '';
+            isRevealed.value = false; // Reset status intip Host
             senaraiUndiDiterima.value = [];
             screen.value = 'game';
         };
@@ -249,17 +235,14 @@ createApp({
             const pengundi = senaraiPemain.value.find(p => p.id === dariId);
             if (pengundi) pengundi.pilihanUndi = keId;
 
-            // Kira jika semua peranti meja makan selesai buat pilihan
             if (senaraiUndiDiterima.value.length >= senaraiPemain.value.length) {
                 kiraKiraanMataRound();
             }
         };
 
         const kiraKiraanMataRound = () => {
-            // Reset undian kaunter pusingan ini
             senaraiPemain.value.forEach(p => p.undian = 0);
             
-            // Kira taburan undi
             senaraiPemain.value.forEach(p => {
                 const sasaran = senaraiPemain.value.find(c => c.id === p.pilihanUndi);
                 if (sasaran) sasaran.undian++;
@@ -286,7 +269,6 @@ createApp({
             ringkasan += `Kata Kunci Imposter: ${kataKunciImposter.value}\n`;
             ringkasan += `Identiti Imposter Sebenar: ${imposter.nama}\n\n`;
 
-            // SEMAK SENARIO A: Imposter Terkantoikan (Tepat & Tiada Seri)
             if (!isSeri && idTertinggi === imposter.id) {
                 imposter.point -= 1;
                 ringkasan += `💥 KANTOI! Meja makan berjaya mengesan Imposter.\n\n📊 Kutipan Mata Pusingan Ini:\n`;
@@ -302,9 +284,7 @@ createApp({
                     }
                 });
                 ringkasan += `- ${imposter.nama} (Imposter): -1 Point`;
-            } 
-            // SEMAK SENARIO B: Imposter Selamat Menyamar (Orang lain diundi atau seri)
-            else {
+            } else {
                 imposter.point += 3;
                 ringkasan += `🎭 TERLEPAS! Imposter berjaya memperdayakan ahli meja.\n`;
                 if (isSeri) ringkasan += `(Undian tertinggi berakhir dengan keputusan seri!)\n`;
@@ -316,7 +296,6 @@ createApp({
                 ringkasan += `- ${imposter.nama} (Imposter): +3 Point`;
             }
 
-            // Hantar maklumat akhir round ke semua player
             senaraiConn.forEach(c => {
                 if (c.open) {
                     c.send({
@@ -335,18 +314,16 @@ createApp({
             mulaPermainan();
         };
 
-        // --- PEMBERSIHAN DATA ---
         const keluarGame = () => { window.location.reload(); };
         const padamNama = () => { localStorage.clear(); window.location.reload(); };
 
-        // Computed Properties untuk susun kedudukan Leaderboard
         const susunPemain = computed(() => {
             return [...senaraiPemain.value].sort((a, b) => b.point - a.point);
         });
 
         return {
             screen, myId, myName, peerIdInput, kodBilik, maxPlayers, isHost, senaraiPemain,
-            myRole, kategoriKunci, kataKunci, kataKunciImposter, statusGame, sudahUndi, pilihanSaya, maklumatTamat,
+            myRole, kategoriKunci, kataKunci, kataKunciImposter, isRevealed, statusGame, sudahUndi, pilihanSaya, maklumatTamat,
             handleLogin, buatBilik, sertaiBilik, mulaPermainan, tukarFasaUndian, mengundi, nextRound, keluarGame, padamNama,
             susunPemain
         };
