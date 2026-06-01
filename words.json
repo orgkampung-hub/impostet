@@ -1,0 +1,27 @@
+[
+  {
+    "kategori": "Makanan Tempatan",
+    "sivil": "Nasi Lemak",
+    "imposter": "Roti Canai"
+  },
+  {
+    "kategori": "Automotif Malaysia",
+    "sivil": "Perodua Myvi",
+    "imposter": "Proton Saga"
+  },
+  {
+    "kategori": "Peranti Elektronik",
+    "sivil": "Telefon Pintar",
+    "imposter": "Tablet"
+  },
+  {
+    "kategori": "Haiwan",
+    "sivil": "Harimau",
+    "imposter": "Kucing"
+  },
+  {
+    "kategori": "Sukan",
+    "sivil": "Bola Sepak",
+    "imposter": "Futsal"
+  }
+]
