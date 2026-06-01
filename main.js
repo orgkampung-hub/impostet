@@ -17,7 +17,6 @@ createApp({
         const kataKunci = ref('');
         const kataKunciImposter = ref('');
         
-        // State Baharu untuk Hide/Reveal Status Perkataan
         const isRevealed = ref(false); 
 
         const statusGame = ref('perbincangan'); 
@@ -144,7 +143,7 @@ createApp({
                     statusGame.value = 'perbincangan';
                     sudahUndi.value = false;
                     pilihanSaya.value = '';
-                    isRevealed.value = false; // Reset status intip
+                    isRevealed.value = false; 
                     screen.value = 'game';
                 }
                 if (data.type === 'MASUK_FASA_UNDI') {
@@ -168,12 +167,12 @@ createApp({
                 const res = await fetch('words.json');
                 databasePerkataan = await res.json();
             } catch (e) {
-                databasePerkataan = [{ kategori: "Makanan", sivil: "Nasi Lemak", imposter: "Roti Canai" }];
+                databasePerkataan = [{ kategori: "Makanan", sivil: "Nasi Lemak", imposter: "Bersambal" }];
             }
         };
 
         const mulaPermainan = () => {
-            if (senaraiPemain.value.length < 2) return; // Had ditukar ke 2 untuk testing
+            if (senaraiPemain.value.length < 2) return; 
 
             const indexRawak = Math.floor(Math.random() * senaraiPemain.value.length);
             senaraiPemain.value.forEach((p, idx) => {
@@ -205,7 +204,7 @@ createApp({
             statusGame.value = 'perbincangan';
             sudahUndi.value = false;
             pilihanSaya.value = '';
-            isRevealed.value = false; // Reset status intip Host
+            isRevealed.value = false; 
             senaraiUndiDiterima.value = [];
             screen.value = 'game';
         };
@@ -217,24 +216,41 @@ createApp({
             });
         };
 
+        // --- KEMASKINI LOGIK UNDI BOLEH CANCEL ---
         const mengundi = (idCalon) => {
-            sudahUndi.value = true;
-            pilihanSaya.value = idCalon;
+            let targetUndi = idCalon;
+
+            // Jika klik nama yang sama buat kali kedua, bermaksud CANCEL undi
+            if (pilihanSaya.value === idCalon) {
+                targetUndi = ''; // Set undian jadi kosong semula
+                pilihanSaya.value = '';
+            } else {
+                pilihanSaya.value = idCalon; // Set target baharu
+            }
             
             if (isHost.value) {
-                prosesMekanikUndi(myId.value, idCalon);
+                prosesMekanikUndi(myId.value, targetUndi);
             } else {
-                connToHost.send({ type: 'HANTAR_UNDI', pengundi: myId.value, daundi: idCalon });
+                connToHost.send({ type: 'HANTAR_UNDI', pengundi: myId.value, daundi: targetUndi });
             }
         };
 
         const prosesMekanikUndi = (dariId, keId) => {
-            if (senaraiUndiDiterima.value.includes(dariId)) return;
-            senaraiUndiDiterima.value.push(dariId);
-
             const pengundi = senaraiPemain.value.find(p => p.id === dariId);
             if (pengundi) pengundi.pilihanUndi = keId;
 
+            // Kemaskini senarai tracker id yang sudah sah mengundi (tidak kosong)
+            if (keId === '') {
+                // Jika player cancel undi, buang dia dari tracker senaraiUndiDiterima
+                senaraiUndiDiterima.value = senaraiUndiDiterima.value.filter(id => id !== dariId);
+            } else {
+                // Jika belum ada dalam tracker, masukkan id dia
+                if (!senaraiUndiDiterima.value.includes(dariId)) {
+                    senaraiUndiDiterima.value.push(dariId);
+                }
+            }
+
+            // Game hanya akan kira point jika jumlah pengundi sah menyamai jumlah total pemain
             if (senaraiUndiDiterima.value.length >= senaraiPemain.value.length) {
                 kiraKiraanMataRound();
             }

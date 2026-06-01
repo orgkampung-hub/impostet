@@ -134,16 +134,17 @@
                     <p class="instruction text-center" v-if="sudahUndi">Undian anda telah dihantar. Menunggu keputusan Host...</p>
                     <p class="instruction text-center" v-else>Klik pada nama pemain yang anda rasa bertindak sebagai Imposter.</p>
                     
-                    <div class="voting-grid">
-                        <button v-for="p in senaraiPemain" 
-                                :key="p.id" 
-                                @click="mengundi(p.id)"
-                                :disabled="sudahUndi || p.id === myId"
-                                class="btn btn-outline"
-                                :class="{ 'btn-selected': pilihanSaya === p.id }">
-                            {{ p.nama }}
-                        </button>
-                    </div>
+                  <div class="voting-grid">
+    <button v-for="p in senaraiPemain" 
+            :key="p.id" 
+            @click="mengundi(p.id)"
+            :disabled="p.id === myId"
+            class="btn btn-outline"
+            :class="{ 'btn-selected': pilihanSaya === p.id }">
+        {{ p.nama }}
+    </button>
+</div>
+
                 </div>
             </section>
 
